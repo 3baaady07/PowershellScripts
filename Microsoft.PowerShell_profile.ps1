@@ -45,22 +45,36 @@ function notepad++{
 
 function vs ( $path )
 {
-     invoke-item $path\*.sln;
+	if( Test-Path $path\*.sln )
+	{
+		invoke-item $path\*.sln;
+	}
+	else
+	{
+		Write-Error -Exception ([System.IO.FileNotFoundException]::new("Cannot find a solution file because it does not exist.")) `
+		-Category ObjectNotFound `
+		-ErrorAction Stop `
+		-CategoryActivity "Invoke-Item"
+	}
 }
 
 $global:firstDir=pwd
 $global:secondDir=""
 function go ( $path )
 {
-     if($path -eq '.')
-	 {
+	if([string]::IsNullOrEmpty($path))
+	{
+		go ~
+	}
+    elseif($path -eq '.')
+	{
 		if(-not ([string]::IsNullOrEmpty($global:secondDir)))
 		{
 			go  $global:secondDir
 		}
-	 }
-	 else
-	 {
+	}
+	else
+	{
 		if( Test-Path $path )
 		{
 			$global:secondDir=$global:firstDir
@@ -75,7 +89,7 @@ function go ( $path )
 			-ErrorAction Stop `
 			-CategoryActivity "Set-Location"
 		}
-	 }
+	}
 }
 
 Function Get-DirectoryTreeSize {
@@ -188,12 +202,15 @@ param(
                 }
             }
  
-            if ($PSBoundParameters.ContainsKey("Recurse")) {
+            if ($PSBoundParameters.ContainsKey("Recurse")) 
+			{
                 Get-DirectoryTreeSize -Path $Path
                 $FolderList = Get-ChildItem -Path $Path -Directory -Recurse | select -ExpandProperty FullName
  
-                if ($FolderList) {
-                    foreach ($Folder in $FolderList) {
+                if ($FolderList)
+				{
+                    foreach ($Folder in $FolderList)
+					{
                         $FileStats = Get-ChildItem -Path $Folder -File | Measure-Object -Property Length -Sum
                         $FileCount = $FileStats.Count
                         $DirectoryCount = Get-ChildItem -Path $Folder -Directory | Measure-Object | select -ExpandProperty Count
@@ -213,12 +230,13 @@ param(
                     }
                 }
             }
-        } catch {
+        } 
+		catch
+		{
             Write-Error $_.Exception.Message
         }
  
     }
  
     END {}
- 
 }
