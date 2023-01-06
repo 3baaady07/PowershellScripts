@@ -274,6 +274,19 @@ Set-Alias -Name grep -Value Select-String
 # for `choco` will not function.
 # See https://ch0.co/tab-completion for details.
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-if (Test-Path($ChocolateyProfile)) {
+if (Test-Path($ChocolateyProfile)) 
+{
   Import-Module "$ChocolateyProfile"
+}
+
+Set-Alias -Name inv -Value Invoke-Item
+
+function scb-path( )
+{
+	pwd -OutVariable p | scb
+}
+
+function env-paths()
+{
+	$env:Path.Replace(";",[System.Environment]::NewLine)
 }
