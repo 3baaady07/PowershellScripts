@@ -290,3 +290,8 @@ function env-paths()
 {
 	$env:Path.Replace(";",[System.Environment]::NewLine)
 }
+
+function get-parent($path)
+{
+	Split-Path $path
+}
