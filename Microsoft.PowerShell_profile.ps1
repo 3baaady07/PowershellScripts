@@ -1,4 +1,25 @@
-﻿function prompt 
+﻿# Import the Chocolatey Profile that contains the necessary code to enable
+# tab-completions to function for `choco`.
+# Be aware that if you are missing these lines from your profile, tab completion
+# for `choco` will not function.
+# See https://ch0.co/tab-completion for details.
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) 
+{
+  Import-Module "$ChocolateyProfile"
+}
+
+if (Test-Path(".\Modules\DockerCompletion"))
+{
+    Import-Module DockerCompletion
+}
+
+if (Test-Path(".\Modules\posh-git"))
+{
+    Import-Module posh-git
+}
+
+function prompt 
 {
   $p = Split-Path -leaf -path (Get-Location)
   
@@ -244,11 +265,6 @@ param(
     END {}
 }
 
-Import-Module DockerCompletion
-Import-Module posh-git
-
-
-
 function touch( $path )
 {
 	if( Test-Path $path )
@@ -267,17 +283,6 @@ function base64 ( $code )
 }
 
 Set-Alias -Name grep -Value Select-String
-
-# Import the Chocolatey Profile that contains the necessary code to enable
-# tab-completions to function for `choco`.
-# Be aware that if you are missing these lines from your profile, tab completion
-# for `choco` will not function.
-# See https://ch0.co/tab-completion for details.
-$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-if (Test-Path($ChocolateyProfile)) 
-{
-  Import-Module "$ChocolateyProfile"
-}
 
 Set-Alias -Name inv -Value Invoke-Item
 
