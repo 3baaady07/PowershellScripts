@@ -8,17 +8,17 @@
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) 
 {
-  Import-Module "$ChocolateyProfile"
+	Import-Module "$ChocolateyProfile"
 }
 
-if (Test-Path(".\Modules\DockerCompletion"))
+if (Test-Path( get-parent($PROFILE) + "\Modules\DockerCompletion"))
 {
-    Import-Module DockerCompletion
+	Import-Module DockerCompletion
 }
 
-if (Test-Path(".\Modules\posh-git"))
+if (Test-Path(get-parent($PROFILE) + "\Modules\posh-git"))
 {
-    Import-Module posh-git
+	Import-Module posh-git
 }
 
 Remove-Item Alias:cd
