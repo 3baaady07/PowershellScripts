@@ -21,6 +21,11 @@ if (Test-Path(get-parent($PROFILE) + "\Modules\posh-git"))
 	Import-Module posh-git
 }
 
+if (Test-Path("C:\Users\$env:USERNAME\AppData\Local\Programs\Terraform\"))
+{
+	Add-PathVariable C:\Users\$env:USERNAME\AppData\Local\Programs\Terraform\
+}
+
 Remove-Item Alias:cd
 
 $global:firstDir=$PWD
